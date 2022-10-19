@@ -12,3 +12,6 @@ benchmarks/graphs
 
 # Build files folder
 dist/*
+
+# UI
+samples
