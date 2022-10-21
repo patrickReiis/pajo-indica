@@ -1,0 +1,60 @@
+[
+    {
+        "title": "a noite também faz parte",
+        "genre": "poesia",
+        "author": "jorge possamai",
+        "keywords": [
+            "tristeza", "depressão", "livro", "poesia", "gótico", "poesia gótica", "sentimentos", "choro", "poema", "poemas curtos", "poemas fáceis", "flyve", "caxias do sul", "vida", "intensidade", "mulheres", "jovem-adulto"
+        ]    
+
+    },
+    {
+        "title": "you",
+        "genre": "suspense",
+        "author": "caroline kepnes",
+        "keywords": [
+            "obsessão", "louco", "psicopata", "sociopata", "estados unidos", "netflix", "assasino", "morte", "romance", "novela", "casal"
+        ]    
+    },
+    {
+        "title": "outros jeitos de usar a boca",
+        "genre": "poesia",
+        "author": "rupi kaur",
+        "keywords": [
+            "tristeza", "depressão", "livro", "poesia", "sentimentos", "choro", "poema", "poemas curtos", "poemas fáceis", "vida", "intensidade", "mulheres", "feminino", "vida"
+        ]
+            
+    },
+    {
+        "title": "histórias do povo",
+        "genre": "contos",
+        "author": "raquel machado",
+        "keywords": [ 
+            "RPG", "escolhas", "romance",  "adolescente", "opções", "galãs", "caxiense", "histórias", "interessante", "cidadãos", "peculiares",  "contos", "questões", "amorosas", "amor",  "desfecho", "diversão", "divertida", "personagens", "vida" 
+        ]
+    },
+    {
+        "title": "pátria", 
+        "genre": "poesia", 
+        "author": "maya falks",
+        "keywords": [
+            "longo", "poema","hino", "nacional", "caxiense", "versos", "desconstrução", "desnudar", "feridas", "ferida", "crítica", "país", "questionar", "expor", "questões", "sociais", "sociedade", "revolta", "Maya", "Falks" 
+        ]    
+    },
+    {
+        "title": "copo vazio",
+        "genre": "romance",
+        "author": "natalia timerman", 
+        "keywords": [
+            "decepção", "amorosa", "tristeza", "ilusão", "sozinha", "sumiço", "sumir", "desespero", "angústia", "raiva", "todavia", "escritora", "vivência", "real", "afeto", "abandono", "abandonada", "tragédia", "vulnerável", "vulnerabilidade", "contemporâneo", "dilemas"
+        ]    
+    },
+    {
+        "title": "pequena coreografia do adeus", 
+        "genre": "poesia", 
+        "author": "aline bei",
+        "keywords": [
+            "poema", "longo", "real", "visceral", "retrato", "sensível", "família", "desajustada", "prêmio", "abismo", "abandono", "queda", "tristeza", "estilo", "marcante", "peso", "pássaro", "morto", "companhia", "letras", "complexa", "complexidade", "violência", "desamor", "mãe", "pai", "paradoxo", "condição", "humana", "tempo", "precário", "escrita", "redentora"
+        ] 
+    }
+]
