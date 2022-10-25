@@ -19,5 +19,5 @@ export type ErrorDb = {
      * @typeParam errorMsg - Each item is a paragraph
      */
     errorMsg: string[];
-    code: 'target-not-found'|'something-else';
+    code: 'target-not-found'|'object-is-not-book';
 }
