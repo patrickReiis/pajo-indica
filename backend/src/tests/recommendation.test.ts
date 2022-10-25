@@ -17,8 +17,6 @@ describe('Testing the recommendation algorithm', () => {
         const bookTitle = 'histórias do povo'; 
         const booksAmount = 3
 
-        console.log(getRecommendedBooks(bookTitle, booksAmount));
-
         expect((getRecommendedBooks(bookTitle, booksAmount) as MatchStatus[]).length).toBeLessThanOrEqual(3)
     });
 })
