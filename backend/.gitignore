@@ -15,3 +15,7 @@ dist/*
 
 # UI
 samples
+
+# env variables
+*.env
+.env.*
