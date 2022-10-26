@@ -9,7 +9,7 @@ export function isBook(obj:any):boolean{
 
     const userObjKeys = Object.keys(obj);
 
-    const mockBook: Book = {title:'', author:'', genre:'poesia', keywords: []} // Used for reference since types doesn't exist at runtime
+    const mockBook: Book = {title:'', author:'', genre:'poesia', keywords: [], imageBase64: 'any'} // Used for reference since types doesn't exist at runtime
     const mockBookKeys = Object.keys(mockBook);
 
     if (userObjKeys.length !== mockBookKeys.length) return false;
