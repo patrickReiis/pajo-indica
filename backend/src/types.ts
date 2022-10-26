@@ -11,6 +11,7 @@ export type Book = {
     genre: Genre;
     author: string;
     keywords: string[];
+    imageBase64: string;
 }
 
 export type ErrorDb = {
