@@ -25,7 +25,7 @@ describe('Testing if the user input is a valid Book', () => {
 
         expect(isBook(fakeBook4)).toEqual(false); 
 
-        const fakeBook5: Book|any = {title: null, author:2, genre: false, keywords: [ 'any message :D'] } // object keys except for 'keywords' propertie are not strings 
+        const fakeBook5: Book|any = {title: null, author:2, genre: false, keywords: [ 'any message :D'], imageBase64: undefined } // object keys except for 'keywords' propertie are not strings 
 
         expect(isBook(fakeBook5)).toEqual(false); 
 
