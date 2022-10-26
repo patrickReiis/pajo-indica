@@ -5,7 +5,7 @@ import type { Book } from '../types';
 describe('Testing if the user input is a valid Book', () => {
 
     test('Must be a book by isBook() returning true', () => {
-        const fakeBook: Book = {title:'', author:'', genre:'poesia', keywords: []}
+        const fakeBook: Book = {title:'', author:'', genre:'poesia', keywords: [], imageBase64: 'any'}
        expect(isBook(fakeBook)).toEqual(true); 
     }) 
 
@@ -25,7 +25,7 @@ describe('Testing if the user input is a valid Book', () => {
 
         expect(isBook(fakeBook4)).toEqual(false); 
 
-        const fakeBook5: Book|any = {title: null, author:2, genre: false, keywords: [ 'any message :D'] } // object keys except for 'keywords' properties are not strings 
+        const fakeBook5: Book|any = {title: null, author:2, genre: false, keywords: [ 'any message :D'] } // object keys except for 'keywords' propertie are not strings 
 
         expect(isBook(fakeBook5)).toEqual(false); 
 
