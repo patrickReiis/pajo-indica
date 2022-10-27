@@ -1,4 +1,5 @@
 import type { Book } from './types';
+import { validImages } from './custom-utils';
 
 export function isBook(obj:any):boolean{
 
@@ -36,6 +37,17 @@ export function isBook(obj:any):boolean{
         if (typeof obj[i] !== 'string') return false;
     }
 
+    if (isImgFileTypeValid(obj.imageBase64) === false) return false;
 
     return true
+}
+
+function isImgFileTypeValid(imageBase64:string){
+
+
+    for (let i = 0; i < validImages.length; i++) {
+        if (imageBase64.slice(0, validImages[i].length) === validImages[i]) return true; 
+    } 
+
+    return false
 }
