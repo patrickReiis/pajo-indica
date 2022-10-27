@@ -5,7 +5,7 @@ import type { Book } from '../types';
 describe('Testing if the user input is a valid Book', () => {
 
     test('Must be a book by isBook() returning true', () => {
-        const fakeBook: Book = {title:'', author:'', genre:'poesia', keywords: [], imageBase64: 'any'}
+        const fakeBook: Book = {title:'', author:'', genre:'poesia', keywords: [], imageBase64: 'data:image/png;base64,R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs'}
        expect(isBook(fakeBook)).toEqual(true); 
     }) 
 
