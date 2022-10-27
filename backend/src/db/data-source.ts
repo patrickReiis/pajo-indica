@@ -12,7 +12,7 @@ export const dataSource = new DataSource({
     password: process.env.DATABASE_PASSWORD,
     database: 'pajo_db',
     synchronize: true,
-    logging: true,
+    logging: false,
     entities: [Book],
     subscribers: [],
     migrations: [],
