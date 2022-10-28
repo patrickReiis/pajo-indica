@@ -29,6 +29,9 @@ describe('Testing if the user input is a valid Book', () => {
 
         expect(isBook(fakeBook5)).toEqual(false); 
 
+        const fakeBook6: Book|any = {title: null, author:2, genre: 'ç', keywords: [ 'any message :D'], imageBase64: undefined} // This genre does not exist 
+        expect(isBook(fakeBook6)).toEqual(false); 
+
     }) 
 
 })
