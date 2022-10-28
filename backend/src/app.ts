@@ -29,10 +29,10 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
         const bookRepo = await dataSource.getRepository(Book);
         
         const book = new Book();
-        book.author = bodyData.author; 
-        book.title = bodyData.title; 
-        book.genre = bodyData.genre; 
-        book.keywords = bodyData.keywords; 
+        book.author = bodyData.author.toLowerCase(); 
+        book.title = bodyData.title.toLowerCase(); 
+        book.genre = bodyData.genre.toLowerCase(); 
+        book.keywords = bodyData.keywords.map((element:string) => element.toLowerCase()); 
 
         const bookSaved = await bookRepo.save(book); // Saving so it can get the id
         const bookId = bookSaved.id;
