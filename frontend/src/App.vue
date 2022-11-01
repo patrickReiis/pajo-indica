@@ -25,9 +25,9 @@ import FooterComponent from './components/FooterComponent.vue';
     <main>
         <nav>
             <ul class="nav-pajo-ul">
-                <li>entenda como funciona</li>
-                <li>registre um livro</li>
-                <li>sobre nós</li>
+                <li><a href="#entenda-como-funciona">entenda como funciona</a></li>
+                <li><a href="#registrar">registre um livro</a></li>
+                <li><a href="#sobre-nós">sobre nós</a></li>
             </ul>
         </nav>
         <div class="general-search-container">
