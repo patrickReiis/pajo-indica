@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import FooterComponent from './components/FooterComponent.vue';
 import AboutUsVue from './components/AboutUs.vue';
+import HowItWorksVue from './components/HowItWorks.vue';
+import RegisterBook from './components/RegisterBook.vue';
 import HomeMain from './components/HomeMain.vue';
 import { ref, computed } from 'vue';
 
 const routes:any = {
     '/home': HomeMain,
-    '/sobre-nos': AboutUsVue 
+    '/sobre-nos': AboutUsVue,
+    '/entenda-como-funciona': HowItWorksVue,
+    '/registrar': RegisterBook
 } as const;
 
 const currentPath = ref(window.location.hash);
