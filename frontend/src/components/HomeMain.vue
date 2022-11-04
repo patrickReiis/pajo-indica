@@ -180,7 +180,11 @@ main {
     }
 
     #search-bar {
-        width: 90%;
+        width: 95%;
+    }
+
+    .icon-search {
+        left: 80%;
     }
 
 }
