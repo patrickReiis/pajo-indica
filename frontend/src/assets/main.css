@@ -8,6 +8,9 @@
 :root {
     --content-font: 'Nunito', sans-serif;
     --content-font-color: #A7B9C4;
+
+    --register-desktop-width: 600px;
+    --register-mobile-width: calc(250px + 20%);
 }
 
 a {
