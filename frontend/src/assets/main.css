@@ -8,8 +8,10 @@
     --content-font: 'Nunito', sans-serif;
     --content-font-color: #A7B9C4;
 
-    --register-desktop-width: 600px;
-    --register-mobile-width: calc(250px + 20%);
+    --register-desktop-width: calc(600px + 10%);
+    --register-mobile-width: calc(270px + 20%);
+
+    --border-radius: 2rem;
 }
 
 a {
