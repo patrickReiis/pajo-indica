@@ -3,9 +3,18 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import PajoIcon from './PajoIcon.vue'
 
-const genres:Ref<Array<string>> = ref([]);
+const genres:Ref<Array<string>> = ref(['romance', 'conto', 'crônica', 'poesia', 'suspense', 'fantasia', 'biografia', 'terror', 'ficção científica', 'autoajuda', 'negócios', 'espiritualidade']);
 
-genres.value[0]
+const currentSelected:Ref<string> = ref('');
+
+function genreSelect(event:Event) {
+
+    currentSelected.value = ((event.target as HTMLLIElement)?.textContent as string); 
+}
+
+const showGenres:Ref<boolean> = ref(false);
+
+const imageFlipClass:Ref<string> = ref('image-flip');
 
 </script>
 
@@ -23,33 +32,40 @@ genres.value[0]
                         accept="image/png, image/jpeg"
                         hidden
                         name="cover-picture"
+                        required
                     >
                 </div>
                 <div class="book-name-container">
                     <label for="book-name">Nome do livro:</label>
-                    <input type="text" id="book-name" placeholder="Ex: Invernos de verão">
+                    <input type="text" id="book-name" placeholder="Ex: Invernos de verão" required>
                 </div>
                 <div class="genre-container">
-                    <label for="genre-select">Gênero do livro</label>
-                    <select id="genre-select" name="genres" required>
-                        <option value="">Nenhum</option>
-                        <option value="poesia">Poesia</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                        <option value="terror">Terror</option>
-                    </select>
+                    <label class="genre-label" @click="showGenres = !showGenres" for="genre-select">
+                        Gênero do livro
+                        <span class="genre-right-container">
+                            {{currentSelected}} 
+                            <span class="arrow-container">
+                                <img v-if="showGenres" :class="imageFlipClass" src="../assets/arrow down.svg" alt="arrow down">
+                                <img v-else src="../assets/arrow down.svg" alt="arrow down">
+                            </span>
+                        </span>
+                    </label>
+                    <div class="genre-options" v-if="showGenres">
+                        <ul>
+                            <li v-for="genre in genres" :key="genre" class="genre-list" @click="showGenres = !showGenres"> 
+                                <label :for="'genre-' + genre" @click="genreSelect"> {{genre}} </label> 
+                                <input :id="'genre-' + genre" type="radio" name="radiobuttons-genre" required>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="author-name-container">
                     <label for="author-name">Autor do livro:</label>
-                    <input type="text" id="author-name" placeholder="Ex: Jorge Luiz Possamai">
+                    <input type="text" id="author-name" placeholder="Ex: Jorge Luiz Possamai" required>
                 </div>
-                <input type="submit">
+                <div class="submit-container">
+                    <input type="submit" id="submit-register">
+                </div>
             </form>
         </div>
     </div>
@@ -105,9 +121,13 @@ label {
 
 #cover-label {
     border-radius: 2rem;
-    width: var(--register-desktop-width); 
     display: inline-flex;
     justify-content: space-between;
+    width: 100%;
+}
+
+.cover-container {
+    width: var(--register-desktop-width); 
 }
 
 .custom-placeholder {
@@ -132,7 +152,7 @@ input:focus-visible {
     outline: 2px solid black;
 }
 
-.book-name-container, .author-name-container {
+.book-name-container, .author-name-container, .submit-container {
     border-radius: 2rem;
     width: var(--register-desktop-width);
     background: white;
@@ -144,18 +164,84 @@ input:focus-visible {
 
 .genre-container {
     width: var(--register-desktop-width);
+    background: white;
+    border-radius: var(--border-radius);
 }
 
-#genre-select {
-    width: 50%;
-    padding: 1rem;
-    font-size: 1rem;
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-select {
-    display: inline;
-    background:red;
-    transition-duration: 15s !important;
+
+.genre-label {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding-right: 0;
+    border-radius: var(--border-radius);
+}
+
+.genre-right-container img{
+    vertical-align: middle;
+}
+
+.genre-right-container {
+    /* making image and selected text not selectable */
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.genre-list input{
+    display: none;
+}
+
+.genre-list label {
+    width: 100%;
+    border-radius: 1rem;
+    background: var(--color-background-light);
+}
+
+.genre-list {
+    margin: 0.5rem;
+    color: var(--color-heading);
+    font-weight: 300;
+    text-align: center;
+}
+
+.genre-options ul {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    align-items: center;
+    justify-content: center;
+    grid-row-gap: 1rem;
+    grid-column-gap: 0.5rem;
+
+}
+
+.genre-options ul li {
+    margin: 0;
+}
+
+.arrow-container {
+    background: var(--color-background-soft);
+    padding: 1rem 1.5rem;
+    margin-left: auto;
+    border-radius: var(--border-radius);
+}
+
+.image-flip {
+    transform: rotate(180deg);
+}
+
+#submit-register {
+    width: 100%;
+    border-radius: var(--border-radius);
+    cursor: pointer;
 }
 
 @media screen and (min-width:0px) and (max-width:700px){
@@ -171,7 +257,7 @@ select {
         text-align: center;
     }
 
-    .genre-container, .book-name-container, .author-name-container, .cover-container {
+    .genre-container, .book-name-container, .author-name-container, .cover-container, .submit-container {
         width: var(--register-mobile-width); 
     }
 
@@ -186,7 +272,7 @@ select {
     }
 
     input, label {
-        border-radius: 2rem;
+        border-radius: var(--border-radius);
         width: 100%; 
     }
 
