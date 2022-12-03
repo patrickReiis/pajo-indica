@@ -16,6 +16,42 @@ const showGenres:Ref<boolean> = ref(false);
 
 const imageFlipClass:Ref<string> = ref('image-flip');
 
+const displayErrorUpload:Ref<boolean> = ref(false);
+const displayErrorGenre:Ref<boolean> = ref(false);
+
+
+function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string) {
+    let count = 0;
+
+    if (fileUploaded.value == '') {
+        displayErrorUpload.value = true
+        count ++;
+    } else {
+        displayErrorUpload.value = false
+    }
+
+    if (currentGenre == '') {
+        displayErrorGenre.value = true
+        count ++;
+    } else {
+        displayErrorGenre.value = false
+    }
+
+    return count >= 1 ? true : false
+}
+
+function tryRegisterBook(e: Event) {
+    e.preventDefault()
+
+    const fileUploaded = (document.getElementById('cover-upload') as HTMLInputElement)
+
+    if (doesErrorsExists(fileUploaded, currentSelected.value) === true) {
+        return
+    }
+
+    console.log('do the request')
+}
+
 </script>
 
 <template>
@@ -25,16 +61,18 @@ const imageFlipClass:Ref<string> = ref('image-flip');
             <h1 id="register-title">registre um livro</h1>
         </header>
         <div class="form-container">
-            <form>
+            <form @submit="tryRegisterBook">
                 <div class="cover-container">
-                    <label for="cover" id="cover-label">Faça Upload da capa (clique aqui) <span class="custom-placeholder">Formatos permitidos: PNG e JPG</span></label>
-                    <input type="file" id="cover"
+                    <label for="cover-upload" id="cover-label">Faça Upload da capa (clique aqui) <span class="custom-placeholder">Formatos permitidos: PNG e JPG</span></label>
+                    <input type="file" id="cover-upload"
                         accept="image/png, image/jpeg"
                         hidden
                         name="cover-picture"
-                        required
                     >
                 </div>
+                    <div class="error-submit" v-if="displayErrorUpload">
+                        Você precisa fazer o upload de uma imagem
+                    </div>
                 <div class="book-name-container">
                     <label for="book-name">Nome do livro:</label>
                     <input type="text" id="book-name" placeholder="Ex: Invernos de verão" required>
@@ -58,6 +96,9 @@ const imageFlipClass:Ref<string> = ref('image-flip');
                             </li>
                         </ul>
                     </div>
+                </div>
+                <div class="error-submit" v-if=" displayErrorGenre">
+                    Você precisa selecionar um gênero
                 </div>
                 <div class="author-name-container">
                     <label for="author-name">Autor do livro:</label>
@@ -242,6 +283,11 @@ ul {
     width: 100%;
     border-radius: var(--border-radius);
     cursor: pointer;
+}
+
+.error-submit {
+   text-align: center;
+   background: red;
 }
 
 @media screen and (min-width:0px) and (max-width:700px){
