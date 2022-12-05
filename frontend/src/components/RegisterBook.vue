@@ -48,8 +48,24 @@ function tryRegisterBook(e: Event) {
     if (doesErrorsExists(fileUploaded, currentSelected.value) === true) {
         return
     }
+    
+    const author = (document.getElementById('author-name') as HTMLInputElement).value
+    const bookName = (document.getElementById('book-name') as HTMLInputElement).value 
+    const genre = currentSelected.value;
+    const bookImg = (fileUploaded.files as FileList)[0];
 
-    console.log('do the request')
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(bookImg);
+
+    fileReader.addEventListener('loadend', async () => {
+        const bookImgBase64 = fileReader.result;
+
+        // try and catch
+        const response = await fetch('http://localhost:5173/api/v1/book/register', {
+            method: 'POST',
+            body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: 'arrumar', imageBase64: bookImgBase64}),
+        })
+    })
 }
 
 </script>
