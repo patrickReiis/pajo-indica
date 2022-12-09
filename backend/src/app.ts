@@ -25,7 +25,6 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
     }
 
     try {
-
         const bookRepo = await dataSource.getRepository(Book);
         
         const book = new Book();
@@ -43,7 +42,7 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
         await bookRepo.save(book);
 
         createImageFile(book.imagePath, bodyData.imageBase64)
-        res.end('Livro registrado com sucesso!')
+        res.json({success: 'Livro registrado com sucesso!'})
         return
 
     }
