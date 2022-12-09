@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import PajoIcon from './PajoIcon.vue'
+import PajoIcon from './PajoIcon.vue';
+import BookExistsErr from './BookExistsErr.vue';
 
 const genres:Ref<Array<string>> = ref(['romance', 'conto', 'crônica', 'poesia', 'suspense', 'fantasia', 'biografia', 'terror', 'ficção científica', 'autoajuda', 'negócios', 'espiritualidade']);
 
 const currentSelected:Ref<string> = ref('');
 
 function genreSelect(event:Event) {
-
     currentSelected.value = ((event.target as HTMLLIElement)?.textContent as string); 
 }
 
@@ -18,9 +18,47 @@ const imageFlipClass:Ref<string> = ref('image-flip');
 
 const displayErrorUpload:Ref<boolean> = ref(false);
 const displayErrorGenre:Ref<boolean> = ref(false);
+const displayErrorKeyword:Ref<boolean> = ref(false);
+const errMsgRegisterBook:Ref<string> = ref('');
 
+const keywords:Ref<string[]> = ref([]);
 
-function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string) {
+function getKeywords(e: Event) {
+    const validKeyword = /^[a-zàáéóúâêôãõç]+ ?$/i;
+    const keywordInput = (e.target as HTMLInputElement);
+
+    // checking if the keyword already exists
+    const doesKeywordAlreadyExists = keywords.value.filter(e => e === keywordInput.value.slice(0, keywordInput.value.length -1));
+    // if the keyword already exists then return because the keywords must not be duplicated
+    if (doesKeywordAlreadyExists.length >= 1) {
+        keywordInput.value = '';
+        return
+    }
+
+    if (validKeyword.test(keywordInput.value) === true) {
+        keywordInput.style.background = 'white';
+        // if the last character is an empty space,
+        // it means the user wants to confirm this word as a keyword
+        if (keywordInput.value.slice(-1) === ' ') {
+            keywords.value.push(keywordInput.value.slice(0, keywordInput.value.length -1))
+            keywordInput.value = '';
+        }
+    } else {
+        keywordInput.style.background = 'red';
+    }
+}
+
+function deleteKeyword(keyword: string) {
+    
+
+    const index = keywords.value.findIndex(
+        (element:string) => element === keyword
+    );
+
+    keywords.value.splice(index, 1);
+}
+
+function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string, keywords: Array<string>) {
     let count = 0;
 
     if (fileUploaded.value == '') {
@@ -37,6 +75,13 @@ function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string)
         displayErrorGenre.value = false
     }
 
+    if (keywords.length === 0) {
+        displayErrorKeyword.value = true
+        count ++;
+    } else {
+        displayErrorKeyword.value = false
+    }
+
     return count >= 1 ? true : false
 }
 
@@ -45,7 +90,7 @@ function tryRegisterBook(e: Event) {
 
     const fileUploaded = (document.getElementById('cover-upload') as HTMLInputElement)
 
-    if (doesErrorsExists(fileUploaded, currentSelected.value) === true) {
+    if (doesErrorsExists(fileUploaded, currentSelected.value, keywords.value) === true) {
         return
     }
     
@@ -60,11 +105,24 @@ function tryRegisterBook(e: Event) {
     fileReader.addEventListener('loadend', async () => {
         const bookImgBase64 = fileReader.result;
 
-        // try and catch
-        const response = await fetch('http://localhost:5173/api/v1/book/register', {
-            method: 'POST',
-            body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: 'arrumar', imageBase64: bookImgBase64}),
-        })
+        try {
+            const response = await fetch('http://localhost:5173/api/v1/book/register', {
+                method: 'POST',
+                body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywords.value, imageBase64: bookImgBase64}),
+                headers: {'Content-Type': 'application/json'}
+            })
+
+            const serverResponse = await response.json()
+
+            if (response.ok === true) {
+                console.log(serverResponse)
+            } else {
+                console.log(serverResponse)
+                errMsgRegisterBook.value = serverResponse['error'][0];
+            } 
+        } catch (e) {
+            console.log(e);
+        }
     })
 }
 
@@ -113,17 +171,34 @@ function tryRegisterBook(e: Event) {
                         </ul>
                     </div>
                 </div>
-                <div class="error-submit" v-if=" displayErrorGenre">
+                <div class="error-submit" v-if="displayErrorGenre">
                     Você precisa selecionar um gênero
                 </div>
                 <div class="author-name-container">
                     <label for="author-name">Autor do livro:</label>
                     <input type="text" id="author-name" placeholder="Ex: Jorge Luiz Possamai" required>
                 </div>
+
+                <div class="keywords-container">
+                    <label for="keyword-input">Palavras chaves do livro: </label>
+                    <input @input="getKeywords" type="text" id="keyword-input" placeholder="Ex: Tristeza, raiva...">
+                    <div class="instructions-keywords">Use apenas palavras formadas por letras, de espaço para confirmar.</div>
+                </div>
+
+                <ul class="keywords-container-ul">
+                    <li class="keyword-li" v-for="keyword in keywords" :key="keyword">
+                        {{keyword}} <img @click="deleteKeyword(keyword)" class="delete-button" src="../assets/x-delete.svg" width=20 height=20 alt="X symbol (meaning button to delete)">
+                    </li>
+                </ul>
+                <div class="error-submit" v-if="displayErrorKeyword">
+                    Você precisa selecionar pelo menos 1 palavra chave
+                </div>
+
                 <div class="submit-container">
                     <input type="submit" id="submit-register">
                 </div>
             </form>
+            <BookExistsErr :errMsg="errMsgRegisterBook"/>
         </div>
     </div>
 </template>
@@ -209,13 +284,13 @@ input:focus-visible {
     outline: 2px solid black;
 }
 
-.book-name-container, .author-name-container, .submit-container {
+.book-name-container, .author-name-container, .submit-container, .keywords-container {
     border-radius: 2rem;
     width: var(--register-desktop-width);
     background: white;
 }
 
-#author-name:placeholder-shown, #book-name:placeholder-shown{
+#author-name:placeholder-shown, #book-name:placeholder-shown, #keyword-input:placeholder-shown {
     text-align: right;
 }
 
@@ -295,6 +370,11 @@ ul {
     transform: rotate(180deg);
 }
 
+.instructions-keywords {
+    text-align: center;
+    margin: 0;
+}
+
 #submit-register {
     width: 100%;
     border-radius: var(--border-radius);
@@ -304,6 +384,28 @@ ul {
 .error-submit {
    text-align: center;
    background: red;
+}
+
+.keywords-container-ul {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    width: var(--register-desktop-width);
+}
+
+.delete-button {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-left: 0.75rem;
+}
+
+.keyword-li {
+    background: var(--color-background-light);
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: var(--border-radius);
+    color: var(--color-text);
 }
 
 @media screen and (min-width:0px) and (max-width:700px){
@@ -319,7 +421,7 @@ ul {
         text-align: center;
     }
 
-    .genre-container, .book-name-container, .author-name-container, .cover-container, .submit-container {
+    .genre-container, .book-name-container, .author-name-container, .cover-container, .submit-container, .keywords-container, .keywords-container-ul {
         width: var(--register-mobile-width); 
     }
 
@@ -338,7 +440,7 @@ ul {
         width: 100%; 
     }
 
-    #author-name:placeholder-shown, #book-name:placeholder-shown{
+    #author-name:placeholder-shown, #book-name:placeholder-shown, #keyword-input:placeholder-shown {
         text-align: center;
     }
 }
