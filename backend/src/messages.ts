@@ -6,7 +6,7 @@ export const targetNotFound:ErrorDb = {
 }
 
 export const notValidBookObj: ErrorDb = {
-    errorMsg: ['This is an invalid Book object.', 'The Book object is {title: string; genre: string[]; author: string; keywords: string[]'],
+    errorMsg: ['This is an invalid Book object.', 'The Book object is {title: string; genre: string; author: string; keywords: string[]'],
     code: 'object-is-not-book'
 }
 
