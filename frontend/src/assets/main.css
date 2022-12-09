@@ -12,6 +12,8 @@
     --register-mobile-width: calc(270px + 20%);
 
     --border-radius: 2rem;
+
+    --error-msg-color: #FF3B3B;
 }
 
 a {
