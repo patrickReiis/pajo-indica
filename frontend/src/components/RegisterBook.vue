@@ -108,9 +108,18 @@ function tryRegisterBook(e: Event) {
         const bookImgBase64 = fileReader.result;
 
         try {
+            const bodyData = JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsList, imageBase64: bookImgBase64}) 
+            const sizeBody = new Blob([bodyData]).size;
+
+            if (sizeBody >= 10000000) { // 10mb
+                errMsgRegisterBook.value = 'O tamanho maximo permitido é de 10mb';
+                successMsgBookCreated.value = '';
+                return
+            }
+
             const response = await fetch('http://localhost:5173/api/v1/book/register', {
                 method: 'POST',
-                body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsList, imageBase64: bookImgBase64}),
+                body: bodyData, 
                 headers: {'Content-Type': 'application/json'}
             })
 
