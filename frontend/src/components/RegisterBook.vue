@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import PajoIcon from './PajoIcon.vue';
 import BookExistsErr from './BookExistsErr.vue';
+import BookCreated from './BookCreated.vue';
 
 const genres:Ref<Array<string>> = ref(['romance', 'conto', 'crônica', 'poesia', 'suspense', 'fantasia', 'biografia', 'terror', 'ficção científica', 'autoajuda', 'negócios', 'espiritualidade']);
 
@@ -20,7 +21,7 @@ const displayErrorUpload:Ref<boolean> = ref(false);
 const displayErrorGenre:Ref<boolean> = ref(false);
 const displayErrorKeyword:Ref<boolean> = ref(false);
 const errMsgRegisterBook:Ref<string> = ref('');
-
+const successMsgBookCreated:Ref<string> = ref('');
 const keywords:Ref<string[]> = ref([]);
 
 function getKeywords(e: Event) {
@@ -98,6 +99,7 @@ function tryRegisterBook(e: Event) {
     const bookName = (document.getElementById('book-name') as HTMLInputElement).value 
     const genre = currentSelected.value;
     const bookImg = (fileUploaded.files as FileList)[0];
+    const keywordsList = keywords.value;
 
     const fileReader = new FileReader();
     fileReader.readAsDataURL(bookImg);
@@ -108,22 +110,34 @@ function tryRegisterBook(e: Event) {
         try {
             const response = await fetch('http://localhost:5173/api/v1/book/register', {
                 method: 'POST',
-                body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywords.value, imageBase64: bookImgBase64}),
+                body: JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsList, imageBase64: bookImgBase64}),
                 headers: {'Content-Type': 'application/json'}
             })
 
             const serverResponse = await response.json()
 
             if (response.ok === true) {
-                console.log(serverResponse)
+                successMsgBookCreated.value = serverResponse['success'];
+                clearAllForm();
             } else {
-                console.log(serverResponse)
                 errMsgRegisterBook.value = serverResponse['error'][0];
+                successMsgBookCreated.value = '';
             } 
         } catch (e) {
             console.log(e);
         }
     })
+}
+
+function clearAllForm() {
+    document.getElementById('cover-upload').value = '';
+    (document.getElementById('book-name') as HTMLInputElement).value = '';
+    currentSelected.value = '';
+    (document.getElementById('author-name') as HTMLInputElement).value = '';
+    keywords.value = [];
+    (document.getElementById('keyword-input') as HTMLInputElement).style.background = 'white';
+    (document.getElementById('keyword-input') as HTMLInputElement).value= '';
+    errMsgRegisterBook.value = ''
 }
 
 </script>
@@ -199,6 +213,7 @@ function tryRegisterBook(e: Event) {
                 </div>
             </form>
             <BookExistsErr :errMsg="errMsgRegisterBook"/>
+            <BookCreated :successMsg="successMsgBookCreated"/>
         </div>
     </div>
 </template>
