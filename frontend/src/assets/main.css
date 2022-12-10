@@ -14,6 +14,7 @@
     --border-radius: 2rem;
 
     --error-msg-color: #FF3B3B;
+    --success-msg-color: #299740;
 }
 
 a {
