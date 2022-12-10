@@ -6,7 +6,7 @@ import { dataSource } from './db/get-data-source';
 import { Book } from './db/entity/Book';
 
 export const app:Application = express();
-app.use(express.json());
+app.use(express.json( {limit: '10mb' } ));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req:Request, res:Response) => {
@@ -25,26 +25,28 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
     }
 
     try {
-        const bookRepo = await dataSource.getRepository(Book);
-        
-        const book = new Book();
-        book.author = bodyData.author.toLowerCase(); 
-        book.title = bodyData.title.toLowerCase(); 
-        book.genre = bodyData.genre.toLowerCase(); 
-        book.keywords = bodyData.keywords.map((element:string) => element.toLowerCase()); 
 
-        const bookSaved = await bookRepo.save(book); // Saving so it can get the id
-        const bookId = bookSaved.id;
+        await dataSource.transaction(async (transactionalEntityManager) => {
 
-        const imgType =  getImgFileType(bodyData.imageBase64);
-        book.imagePath = `media/${bookId}.${imgType}`; 
+            const book = new Book();
+            book.author = bodyData.author.toLowerCase(); 
+            book.title = bodyData.title.toLowerCase(); 
+            book.genre = bodyData.genre.toLowerCase(); 
+            book.keywords = bodyData.keywords.map((element:string) => element.toLowerCase()); 
 
-        await bookRepo.save(book);
+            const bookSaved = await transactionalEntityManager.save(book); // Saving so it can get the id
+            const bookId = bookSaved.id;
 
-        createImageFile(book.imagePath, bodyData.imageBase64)
-        res.json({success: 'Livro registrado com sucesso!'})
-        return
+            const imgType =  getImgFileType(bodyData.imageBase64);
+            book.imagePath = `media/${bookId}.${imgType}`; 
 
+            await transactionalEntityManager.save(book);
+
+            createImageFile(book.imagePath, bodyData.imageBase64)
+            res.json({success: 'Livro registrado com sucesso!'})
+            return
+
+        })
     }
     catch (err:any) {
         if (err.code == '23505'){ // This code means 'unique_violation' - See https://www.postgresql.org/docs/current/errcodes-appendix.html
@@ -55,7 +57,7 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
         else {
             console.log(err);
             res.writeHead(500);
-            res.end('Internal Error')
+            res.json({error: 'Erro do servidor'});
             return
         }
 
