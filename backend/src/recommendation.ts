@@ -3,12 +3,12 @@ import { getAllBooksFromDb, getBookTargetFromDb } from './db/database';
 import { targetNotFound as targetBookNotFound } from './messages';
 
 
-export function getRecommendedBooks(target: string, booksAmount: number):MatchStatus[]|ErrorDb{
+export async function getRecommendedBooks(target: string, booksAmount: number):Promise<MatchStatus[]|ErrorDb>{
 
-    const targetBook = getBookTargetFromDb(target);  
+    const targetBook = await getBookTargetFromDb(target);  
     if (targetBook == null) return targetBookNotFound;
 
-    const books = getAllBooksFromDb();
+    const books = await getAllBooksFromDb();
 
     return filterBooks(targetBook, books, booksAmount);
 }
