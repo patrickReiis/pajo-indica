@@ -14,3 +14,8 @@ export const bookAlreadyExist: ErrorDb = {
     errorMsg: ['Esse livro já está cadastrado em nosso sistema, vá até a barra de pesquisa para encontrá-lo.'],
     code: 'book-already-exist'
 }
+
+export const bookRecommendWrongFormat: ErrorDb = {
+    errorMsg: ['The book format must be { book: string }'],
+    code: 'wrong-book-recommend-format' 
+}
