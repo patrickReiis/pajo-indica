@@ -3,7 +3,6 @@ export type MatchStatus = {
     book: Book; 
 };
 
-
 type Genre = 'romance'|'conto'|'crônica'|'poesia'|'suspense'|'fantasia'|'biografia e autobiografia'|'guerras'|'ficção científica'|'auto ajuda'|'negócios e administração'|'religião e espiritualidade'|'terror'|'outros';
 
 export type Book = {
@@ -11,7 +10,8 @@ export type Book = {
     genre: Genre;
     author: string;
     keywords: string[];
-    imageBase64: string;
+    imageBase64?: string;
+    imagePath?: string;
 }
 
 export type ErrorDb = {
@@ -20,5 +20,5 @@ export type ErrorDb = {
      * @typeParam errorMsg - Each item is a paragraph
      */
     errorMsg: string[];
-    code: 'target-not-found'|'object-is-not-book'|'book-already-exist';
+    code: 'target-not-found'|'object-is-not-book'|'book-already-exist'|'wrong-book-recommend-format';
 }
