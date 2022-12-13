@@ -5,8 +5,8 @@
         "author": "jorge possamai",
         "keywords": [
             "tristeza", "depressão", "livro", "poesia", "gótico", "poesia gótica", "sentimentos", "choro", "poema", "poemas curtos", "poemas fáceis", "flyve", "caxias do sul", "vida", "intensidade", "mulheres", "jovem-adulto"
-        ]    
-
+        ],
+        "imagePath": "media/emptybook.png"    
     },
     {
         "title": "you",
@@ -14,7 +14,8 @@
         "author": "caroline kepnes",
         "keywords": [
             "obsessão", "louco", "psicopata", "sociopata", "estados unidos", "netflix", "assasino", "morte", "romance", "novela", "casal"
-        ]    
+        ],    
+        "imagePath": "media/emptybook.png"    
     },
     {
         "title": "outros jeitos de usar a boca",
@@ -22,16 +23,18 @@
         "author": "rupi kaur",
         "keywords": [
             "tristeza", "depressão", "livro", "poesia", "sentimentos", "choro", "poema", "poemas curtos", "poemas fáceis", "vida", "intensidade", "mulheres", "feminino", "vida"
-        ]
+        ],
+        "imagePath": "media/emptybook.png"    
             
     },
     {
         "title": "histórias do povo",
-        "genre": "contos",
+        "genre": "conto",
         "author": "raquel machado",
         "keywords": [ 
             "RPG", "escolhas", "romance",  "adolescente", "opções", "galãs", "caxiense", "histórias", "interessante", "cidadãos", "peculiares",  "contos", "questões", "amorosas", "amor",  "desfecho", "diversão", "divertida", "personagens", "vida" 
-        ]
+        ],
+        "imagePath": "media/emptybook.png"    
     },
     {
         "title": "pátria", 
@@ -39,7 +42,8 @@
         "author": "maya falks",
         "keywords": [
             "longo", "poema","hino", "nacional", "caxiense", "versos", "desconstrução", "desnudar", "feridas", "ferida", "crítica", "país", "questionar", "expor", "questões", "sociais", "sociedade", "revolta", "Maya", "Falks" 
-        ]    
+        ],    
+        "imagePath": "media/emptybook.png"    
     },
     {
         "title": "copo vazio",
@@ -47,7 +51,8 @@
         "author": "natalia timerman", 
         "keywords": [
             "decepção", "amorosa", "tristeza", "ilusão", "sozinha", "sumiço", "sumir", "desespero", "angústia", "raiva", "todavia", "escritora", "vivência", "real", "afeto", "abandono", "abandonada", "tragédia", "vulnerável", "vulnerabilidade", "contemporâneo", "dilemas"
-        ]    
+        ],    
+        "imagePath": "media/emptybook.png"    
     },
     {
         "title": "pequena coreografia do adeus", 
@@ -55,6 +60,7 @@
         "author": "aline bei",
         "keywords": [
             "poema", "longo", "real", "visceral", "retrato", "sensível", "família", "desajustada", "prêmio", "abismo", "abandono", "queda", "tristeza", "estilo", "marcante", "peso", "pássaro", "morto", "companhia", "letras", "complexa", "complexidade", "violência", "desamor", "mãe", "pai", "paradoxo", "condição", "humana", "tempo", "precário", "escrita", "redentora"
-        ] 
+        ], 
+        "imagePath": "media/emptybook.png"    
     }
 ]
