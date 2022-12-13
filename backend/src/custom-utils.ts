@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 
-
-
 export const validImages:string[] = [
         'data:image/jpeg;base64,',
         'data:image/png;base64,',
