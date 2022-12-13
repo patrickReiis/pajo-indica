@@ -1,17 +1,70 @@
+import 'reflect-metadata';
 import express, {Application, Request, Response } from 'express';
 import { isBook } from './validation';
-import { notValidBookObj, bookAlreadyExist } from './messages';
+import { notValidBookObj, bookAlreadyExist, bookRecommendWrongFormat } from './messages';
 import { getImgFileType, createImageFile } from './custom-utils';
 import { dataSource } from './db/get-data-source';
 import { Book } from './db/entity/Book';
+import { getRecommendedBooks } from './recommendation';
+import { ErrorDb, Book as BookType } from './types';
+import { getAllBooksFromDb } from './db/database';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export const app:Application = express();
 app.use(express.json( {limit: '10mb' } ));
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req:Request, res:Response) => {
+app.get('/*', (req:Request, res:Response) => {
+    const filePath = path.join(__dirname, 'public', req.url);
+    const extName = path.extname(filePath);
+    let contentType: string;
 
-    res.end('Hi');
+    switch(extName) {
+        case '.jpg':
+           contentType = 'image/jpeg';
+           break; 
+        case '.jpeg':
+           contentType = 'image/jpeg';
+           break; 
+        case '.png':
+            contentType = 'image/png';
+            break
+    }
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            res.writeHead(404);
+            res.end();
+            return
+        }
+        res.writeHead(200, {'Content-Type': contentType })
+        res.end(data);
+    })
+    
+})
+
+app.get('/loadScript', async (req: Request, res:Response) => {
+    try {
+        // script to save JSON in PostgreSQL database using TypeORM
+        (await getAllBooksFromDb()).forEach(async (e) => {
+            const book = new Book()
+            book.title = e.title;
+            book.author = e.author;
+            book.genre= e.genre as BookType['genre'];
+            book.imagePath = e.imagePath as string;
+            book.keywords = e.keywords;
+            const bookRepo = await dataSource.getRepository(Book).save(book);
+            console.log(bookRepo)
+            res.end('Loaded successfuly');
+            return
+        })
+    }
+    catch (e) {
+        console.log('Error during script database loading');
+        res.end('Failed');
+        return
+    }
 })
 
 app.post('/api/v1/book/register', async (req: Request, res: Response) => {
@@ -62,4 +115,23 @@ app.post('/api/v1/book/register', async (req: Request, res: Response) => {
         }
 
     }
+})
+
+app.post('/api/v1/book/recommend', async (req:Request, res:Response) => {
+    const bookName = req.body['book'];
+
+    if (typeof bookName !== typeof '') {
+        res.status(400).json({error: bookRecommendWrongFormat})
+        return
+    }
+
+    const similarBooks = await getRecommendedBooks(bookName, 3);
+
+    if (((similarBooks as ErrorDb).code) === 'target-not-found') {
+        res.status(404).json({errors: (similarBooks as ErrorDb).errorMsg })
+        return
+    }
+
+    res.json(similarBooks)
+    return
 })
