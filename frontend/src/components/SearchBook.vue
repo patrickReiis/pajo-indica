@@ -1,16 +1,40 @@
 <script setup lang="ts">
+import SearchError from './SearchError.vue';
+import SimilarBooks from './SimilarBooks.vue';
+import type { BookPercentageMatch } from './SimilarBooks.vue';
+import type { Ref } from 'vue';
+import { ref } from 'vue';
+
+const errors:Ref<Array<string>> = ref([]);
+const books:Ref<BookPercentageMatch[]> = ref([]);
+
 
 async function findSimilarBooks() {
     const bookName = (document.getElementById('search-bar') as HTMLInputElement).value;
+
+    // for each new request clean array
+    errors.value = [];
+    books.value = [];
 
     const response = await fetch('http://localhost:5173/api/v1/book/recommend', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ book: bookName })
     })
+
     try {
-        const similarBooks = response.json();
-        console.log(similarBooks);
+        if (response.ok) {
+            const data = await response.json();
+            books.value = data;
+        } else {
+            if (response.status === 404) {
+                const data = await response.json();
+                errors.value = data['errors'];
+            }
+            if (response.status === 500) {
+                errors.value = ['Erro do servidor', 'Tente novamente mais tarde']
+            }
+        }
     }
     catch (e) {
         console.log(e);
@@ -39,6 +63,8 @@ async function findSimilarBooks() {
                 </svg>
             </div>
         </div>
+        <SearchError :messages="errors"/>
+        <SimilarBooks v-if="books.length" :similarBooks ="books"/>
     </div>
 </template>
 
@@ -56,7 +82,7 @@ async function findSimilarBooks() {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
-    padding-bottom: 5.45rem;
+    padding-bottom: 2.45rem;
 }
 
 .search-title {
