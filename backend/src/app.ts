@@ -44,10 +44,11 @@ app.get('/*', (req:Request, res:Response) => {
     
 })
 
-app.get('/loadScript', async (req: Request, res:Response) => {
+app.post('/loadScript', async (req: Request, res:Response) => {
     try {
         // script to save JSON in PostgreSQL database using TypeORM
-        (await getAllBooksFromDb()).forEach(async (e) => {
+        const books = await getAllBooksFromDb(true);
+        books.forEach(async (e) => {
             const book = new Book()
             book.title = e.title;
             book.author = e.author;
@@ -56,12 +57,12 @@ app.get('/loadScript', async (req: Request, res:Response) => {
             book.keywords = e.keywords;
             const bookRepo = await dataSource.getRepository(Book).save(book);
             console.log(bookRepo)
-            res.end('Loaded successfuly');
-            return
         })
+        res.end('Loaded successfuly');
+        return
     }
     catch (e) {
-        console.log('Error during script database loading');
+        console.log('Error during script database loading', e);
         res.end('Failed');
         return
     }
