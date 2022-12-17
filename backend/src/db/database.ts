@@ -1,9 +1,13 @@
 import type { Book as BookType} from '../types';
 import { dataSource } from './get-data-source';
 import { Book } from './entity/Book';
+const booksJSON = require('./books.json');
 
-// think of image path and image base 64, also ID
-export async function getAllBooksFromDb(): Promise<BookType[]>{
+export async function getAllBooksFromDb(loadFromJSON=false): Promise<BookType[]>{
+    if (loadFromJSON === true) {
+        return booksJSON as BookType[]
+    }
+
     const books = await dataSource.getRepository(Book).find({
         select: {
             title: true,
