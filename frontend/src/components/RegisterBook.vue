@@ -187,7 +187,7 @@ function clearAllForm() {
                 </div>
                 <div class="genre-container">
                     <label class="genre-label" @click="showGenres = !showGenres" for="genre-select">
-                        Gênero do livro
+                        Gênero do livro:
                         <span class="genre-right-container">
                             {{currentSelected}} 
                             <span class="arrow-container">
