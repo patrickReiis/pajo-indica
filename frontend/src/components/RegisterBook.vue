@@ -325,8 +325,8 @@ input:focus-visible {
     background: white;
 }
 
-#author-name:placeholder-shown, #book-name:placeholder-shown, #keyword-input:placeholder-shown {
-    text-align: right;
+#author-name, #book-name, #keyword-input {
+    text-align: end;
 }
 
 .genre-container {
