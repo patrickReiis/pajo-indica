@@ -8,6 +8,7 @@ import BookCreated from './BookCreated.vue';
 const genres:Ref<Array<string>> = ref(['romance', 'conto', 'crônica', 'poesia', 'suspense', 'fantasia', 'biografia', 'terror', 'ficção científica', 'autoajuda', 'negócios', 'espiritualidade']);
 
 const currentSelected:Ref<string> = ref('');
+const validKeyword = /^[a-zàáéóúâêôãõçí]+ ?$/i;
 
 function genreSelect(event:Event) {
     currentSelected.value = ((event.target as HTMLLIElement)?.textContent as string); 
@@ -24,9 +25,15 @@ const errMsgRegisterBook:Ref<string> = ref('');
 const successMsgBookCreated:Ref<string> = ref('');
 const keywords:Ref<Set<string>> = ref(new Set());
 
-function getKeywords(e: Event) {
-    const validKeyword = /^[a-zàáéóúâêôãõçí]+ ?$/i;
+function getKeywordsInput(e: Event) {
     const keywordInput = (e.target as HTMLInputElement);
+    const hasWhiteSpaceOrComma = /[\s,]+/
+
+    // if there is a white space of a comma in the string, presume the user has pasted it
+    if (hasWhiteSpaceOrComma.test(keywordInput.value) === true) {
+        handleKeywordsPaste(keywordInput);
+        return
+    }
 
     if (validKeyword.test(keywordInput.value) === true) {
         keywordInput.style.background = 'white';
@@ -34,11 +41,28 @@ function getKeywords(e: Event) {
         // it means the user wants to confirm this word as a keyword
         if (keywordInput.value.slice(-1) === ' ') {
             keywords.value.add(keywordInput.value.slice(0, keywordInput.value.length -1))
-            keywordInput.value = '';
         }
     } else {
         keywordInput.style.background = '#D75353';
     }
+}
+
+function handleKeywordsPaste(keywordInput: HTMLInputElement) {
+
+    const keywordsSplit = keywordInput.value.split(/[\s,]+/) 
+
+    let wrongWords = '';
+    let sep = '';
+
+    keywordsSplit.forEach((word: string) => {
+        if (validKeyword.test(word) === true) {
+            keywords.value.add(word.toLowerCase())
+        } else {
+            wrongWords += sep + word 
+        }
+    })
+    console.log(wrongWords)
+    keywordInput.value = wrongWords;
 }
 
 function deleteKeyword(keyword: string) {
@@ -191,7 +215,7 @@ function clearAllForm() {
 
                 <div class="keywords-container">
                     <label for="keyword-input">Palavras chaves do livro: </label>
-                    <input @input="getKeywords" type="text" id="keyword-input" placeholder="Ex: Tristeza, raiva...">
+                    <input @input="getKeywordsInput" type="text" id="keyword-input" placeholder="Ex: Tristeza, raiva...">
                     <div class="instructions-keywords">Use apenas palavras formadas por letras, de espaço para confirmar.</div>
                 </div>
 
