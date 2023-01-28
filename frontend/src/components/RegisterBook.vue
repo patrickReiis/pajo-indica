@@ -24,6 +24,7 @@ const displayErrorKeyword:Ref<boolean> = ref(false);
 const errMsgRegisterBook:Ref<string> = ref('');
 const successMsgBookCreated:Ref<string> = ref('');
 const keywords:Ref<Set<string>> = ref(new Set());
+const imgPreviewSrc = ref('');
 
 function getKeywordsInput(e: Event) {
     const keywordInput = (e.target as HTMLInputElement);
@@ -63,6 +64,14 @@ function handleKeywordsPaste(keywordInput: HTMLInputElement) {
     })
     console.log(wrongWords)
     keywordInput.value = wrongWords;
+}
+
+function handleShowPreview(e: Event) {
+    const input = (e.target as HTMLInputElement);
+    if (input === null) return;
+    const file = input?.files[0];
+
+    imgPreviewSrc.value = URL.createObjectURL(file)
 }
 
 function deleteKeyword(keyword: string) {
@@ -176,8 +185,12 @@ function clearAllForm() {
                         accept="image/png, image/jpeg"
                         hidden
                         name="cover-picture"
+                        @change="handleShowPreview"
                     >
                 </div>
+
+                <img :src="imgPreviewSrc" id="img-preview" alt="your selected img" v-if="imgPreviewSrc.length > 0">
+
                     <div class="error-submit" v-if="displayErrorUpload">
                         Você precisa fazer o upload de uma imagem
                     </div>
@@ -341,6 +354,11 @@ ul {
     margin: 0;
 }
 
+#img-preview {
+    max-width: 350px;
+    max-height: 400px;
+    object-fit: contain;
+}
 
 .genre-label {
     width: 100%;
