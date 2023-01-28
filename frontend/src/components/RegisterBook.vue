@@ -22,26 +22,18 @@ const displayErrorGenre:Ref<boolean> = ref(false);
 const displayErrorKeyword:Ref<boolean> = ref(false);
 const errMsgRegisterBook:Ref<string> = ref('');
 const successMsgBookCreated:Ref<string> = ref('');
-const keywords:Ref<string[]> = ref([]);
+const keywords:Ref<Set<string>> = ref(new Set());
 
 function getKeywords(e: Event) {
     const validKeyword = /^[a-zàáéóúâêôãõçí]+ ?$/i;
     const keywordInput = (e.target as HTMLInputElement);
-
-    // checking if the keyword already exists
-    const doesKeywordAlreadyExists = keywords.value.filter(e => e === keywordInput.value.slice(0, keywordInput.value.length -1));
-    // if the keyword already exists then return because the keywords must not be duplicated
-    if (doesKeywordAlreadyExists.length >= 1) {
-        keywordInput.value = '';
-        return
-    }
 
     if (validKeyword.test(keywordInput.value) === true) {
         keywordInput.style.background = 'white';
         // if the last character is an empty space,
         // it means the user wants to confirm this word as a keyword
         if (keywordInput.value.slice(-1) === ' ') {
-            keywords.value.push(keywordInput.value.slice(0, keywordInput.value.length -1))
+            keywords.value.add(keywordInput.value.slice(0, keywordInput.value.length -1))
             keywordInput.value = '';
         }
     } else {
@@ -51,12 +43,7 @@ function getKeywords(e: Event) {
 
 function deleteKeyword(keyword: string) {
     
-
-    const index = keywords.value.findIndex(
-        (element:string) => element === keyword
-    );
-
-    keywords.value.splice(index, 1);
+    keywords.value.delete(keyword)
 }
 
 function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string, keywords: Array<string>) {
@@ -76,7 +63,7 @@ function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string,
         displayErrorGenre.value = false
     }
 
-    if (keywords.length === 0) {
+    if (keywords.size === 0) {
         displayErrorKeyword.value = true
         count ++;
     } else {
@@ -99,7 +86,7 @@ function tryRegisterBook(e: Event) {
     const bookName = (document.getElementById('book-name') as HTMLInputElement).value 
     const genre = currentSelected.value;
     const bookImg = (fileUploaded.files as FileList)[0];
-    const keywordsList = keywords.value;
+    const keywordsSet = keywords.value;
 
     const fileReader = new FileReader();
     fileReader.readAsDataURL(bookImg);
@@ -108,7 +95,7 @@ function tryRegisterBook(e: Event) {
         const bookImgBase64 = fileReader.result;
 
         try {
-            const bodyData = JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsList, imageBase64: bookImgBase64}) 
+            const bodyData = JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsSet, imageBase64: bookImgBase64}) 
             const sizeBody = new Blob([bodyData]).size;
 
             if (sizeBody >= 10000000) { // 10mb
@@ -143,7 +130,7 @@ function clearAllForm() {
     (document.getElementById('book-name') as HTMLInputElement).value = '';
     currentSelected.value = '';
     (document.getElementById('author-name') as HTMLInputElement).value = '';
-    keywords.value = [];
+    keywords.value = new Set();
     (document.getElementById('keyword-input') as HTMLInputElement).style.background = 'white';
     (document.getElementById('keyword-input') as HTMLInputElement).value= '';
     errMsgRegisterBook.value = ''
@@ -218,7 +205,7 @@ function clearAllForm() {
                 </div>
 
                 <div class="submit-container">
-                    <input type="submit" id="submit-register">
+                    <input v-bind:value ="'Salvar livro'" type="submit" id="submit-register">
                 </div>
             </form>
             <BookExistsErr :errMsg="errMsgRegisterBook"/>
