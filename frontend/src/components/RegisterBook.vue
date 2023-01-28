@@ -45,7 +45,7 @@ function getKeywords(e: Event) {
             keywordInput.value = '';
         }
     } else {
-        keywordInput.style.background = 'red';
+        keywordInput.style.background = '#D75353';
     }
 }
 
