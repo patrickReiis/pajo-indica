@@ -214,7 +214,7 @@ function clearAllForm() {
                     </li>
                 </ul>
                 <div class="error-submit" v-if="displayErrorKeyword">
-                    Você precisa selecionar pelo menos 1 palavra chave
+                    Você precisa selecionar pelo menos 1 palavra-chave
                 </div>
 
                 <div class="submit-container">
@@ -407,7 +407,10 @@ ul {
 
 .error-submit {
    text-align: center;
-   background: red;
+   background: #D75353;
+   border-radius: 1rem;
+   padding: 0.5rem;
+   margin: 0;
 }
 
 .keywords-container-ul {
