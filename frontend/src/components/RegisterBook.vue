@@ -25,7 +25,7 @@ const successMsgBookCreated:Ref<string> = ref('');
 const keywords:Ref<string[]> = ref([]);
 
 function getKeywords(e: Event) {
-    const validKeyword = /^[a-zàáéóúâêôãõç]+ ?$/i;
+    const validKeyword = /^[a-zàáéóúâêôãõçí]+ ?$/i;
     const keywordInput = (e.target as HTMLInputElement);
 
     // checking if the keyword already exists
