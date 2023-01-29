@@ -2,7 +2,7 @@ import type { Book } from './types';
 import { validImages } from './custom-utils';
 
 export function isBook(obj:any):boolean{
-    const allowedGenres: Book['genre'][] = ['romance','conto','crônica','poesia','suspense','fantasia','biografia e autobiografia','guerras','ficção científica','auto ajuda','negócios e administração','religião e espiritualidade','terror','outros'];
+    const allowedGenres: Book['genre'][] = ['romance','conto','crônica','poesia','suspense','fantasia','biografia e autobiografia', 'biografia', 'guerras','ficção científica','auto ajuda','negócios e administração', 'negócios', 'religião e espiritualidade', 'espiritualidade','terror','outros'];
 
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
         return false
