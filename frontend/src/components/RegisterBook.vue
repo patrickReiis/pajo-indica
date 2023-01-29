@@ -79,7 +79,7 @@ function deleteKeyword(keyword: string) {
     keywords.value.delete(keyword)
 }
 
-function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string, keywords: Array<string>) {
+function doesErrorsExists(fileUploaded:  HTMLInputElement, currentGenre: string, keywords: Set<string>) {
     let count = 0;
 
     if (fileUploaded.value == '') {
@@ -119,7 +119,8 @@ function tryRegisterBook(e: Event) {
     const bookName = (document.getElementById('book-name') as HTMLInputElement).value 
     const genre = currentSelected.value;
     const bookImg = (fileUploaded.files as FileList)[0];
-    const keywordsSet = keywords.value;
+    const keywordsArr = Array.from(keywords.value);
+
 
     const fileReader = new FileReader();
     fileReader.readAsDataURL(bookImg);
@@ -128,7 +129,7 @@ function tryRegisterBook(e: Event) {
         const bookImgBase64 = fileReader.result;
 
         try {
-            const bodyData = JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsSet, imageBase64: bookImgBase64}) 
+            const bodyData = JSON.stringify({ author: author, title: bookName, genre: genre, keywords: keywordsArr, imageBase64: bookImgBase64}) 
             const sizeBody = new Blob([bodyData]).size;
 
             if (sizeBody >= 10000000) { // 10mb
@@ -159,7 +160,7 @@ function tryRegisterBook(e: Event) {
 }
 
 function clearAllForm() {
-    document.getElementById('cover-upload').value = '';
+    (document.getElementById('cover-upload') as HTMLInputElement).value = '';
     (document.getElementById('book-name') as HTMLInputElement).value = '';
     currentSelected.value = '';
     (document.getElementById('author-name') as HTMLInputElement).value = '';
