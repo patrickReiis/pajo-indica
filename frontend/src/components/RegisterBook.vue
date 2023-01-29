@@ -161,6 +161,7 @@ function tryRegisterBook(e: Event) {
 
 function clearAllForm() {
     (document.getElementById('cover-upload') as HTMLInputElement).value = '';
+    imgPreviewSrc.value = '';
     (document.getElementById('book-name') as HTMLInputElement).value = '';
     currentSelected.value = '';
     (document.getElementById('author-name') as HTMLInputElement).value = '';
