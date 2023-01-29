@@ -19,7 +19,7 @@ async function findSimilarBooks() {
     const response = await fetch('http://localhost:5173/api/v1/book/recommend', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ book: bookName })
+        body: JSON.stringify({ book: bookName.toLowerCase() })
     })
 
     try {
