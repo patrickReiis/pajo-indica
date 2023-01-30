@@ -224,7 +224,7 @@ function clearAllForm() {
                     Você precisa selecionar um gênero
                 </div>
                 <div class="author-name-container">
-                    <label for="author-name">Autor do livro:</label>
+                    <label for="author-name">Autor(a) do livro:</label>
                     <input type="text" id="author-name" placeholder="Ex: Jorge Luiz Possamai" required>
                 </div>
 
